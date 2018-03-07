@@ -1,0 +1,70 @@
+parameters:
+  database_user: root
+  database_name: project
+  database_host: localhost
+  database_password: ~
+  uploads_dir: 'uploads'
+  noreply_email: 'noreply@mvc.com'
+  some_api_key: '5dhfj59uffnr8n'
+
+routes:
+  book_item:
+      pattern: /project/book/{id}
+      controller: BookController
+      action: showAction
+      parameters:
+        id: "[0-9]*"
+  books_list:
+    pattern: /project/books/{page}
+    controller: BookController
+    action: indexAction
+    parameters:
+      page: "[0-9]+"
+  books_list_default:
+      pattern: /project/books
+      controller: BookController
+      action: indexAction
+  feedback:
+    pattern: /project/feedback
+    controller: DefaultController
+    action: feedbackAction
+  sign_in:
+    pattern: /project/sign-in
+    controller: SecurityController
+    action: loginAction
+  admin_books:
+      pattern: /project/admin/books
+      controller: Admin\BookController
+      action: indexAction
+  admin_homepage:
+    pattern: /project/admin
+    controller: Admin\DefaultController
+    action: indexAction
+  add_to_cart:
+    pattern: /project/add-to-cart/{id}
+    controller: CartController
+    action: addToCartAction
+    parameters:
+      id: "[0-9]*"
+  cart:
+      pattern: /project/cart
+      controller: CartController
+      action: indexAction
+  logout:
+    pattern: /project/logout
+    controller: SecurityController
+    action: logoutAction
+  api_books:
+    pattern: /project/api/books
+    controller: API\BookController
+    action: indexAction
+  api_book:
+      pattern: /project/api/book/{id}
+      controller: API\BookController
+      action: showAction
+      parameters:
+        id: "[0-9]*"
+  homepage:
+    pattern: /project
+    controller: DefaultController
+    action: indexAction

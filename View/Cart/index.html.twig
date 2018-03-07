@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+<h1>My Cart</h1>
+
+<div align="left">
+    {% for book in books %}
+    {{ loop.index }}. {{ book.title }} <br>
+    {% endfor %}
+</div>
+{% endblock %}
