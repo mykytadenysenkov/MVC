@@ -55,9 +55,15 @@ routes:
     controller: SecurityController
     action: logoutAction
   api_books:
-    pattern: /project/api/books
+    pattern: /project/api/books/{page}
     controller: API\BookController
     action: indexAction
+    parameters:
+          page: "[0-9]*"
+  api_books_default:
+      pattern: /project/api/books
+      controller: API\BookController
+      action: indexAction
   api_book:
       pattern: /project/api/book/{id}
       controller: API\BookController

@@ -13,11 +13,10 @@ class BookController extends Controller
         $repository = $this->container->get('repository_factory')->createRepository('Book');
         $books_count = $repository->count();
         $page = $request->get('page', 1);
-        $books = $repository->findAll($page);
 
         $pagination = new Pagination(array('itemsCount' => $books_count,  'itemsPerPage' => PER_PAGE, 'currentPage' => $page));
 
-        return $this->render('index.html.twig', ['books' => $books, 'pagination' => $pagination, 'flash' => Session::getFlash()]);
+        return $this->render('index.html.twig', ['pagination' => $pagination, 'flash' => Session::getFlash(), 'page' => $page]);
     }
 
     public function showAction(Request $request)

@@ -1,34 +1,64 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
-<h1>Books</h1>
-<div style="margin: 10px">
-    {% for button in pagination.buttons %}
-        {% if button.isActive %}
-            <a href='{{ path('books_list', button) }}'>
-                <button class="btn btn-success">{{ button.text }}</button>
-            </a>
-        {% else %}
-            <a href='{{ path('books_list', button) }}'>
-                <button class="btn btn-info">{{ button.text }}</button>
-            </a>
-        {% endif %}
-    {% endfor %}
-</div>
-<div class="row" align="left">
-    {% for book in books %}
-        <div class="col-md-4">
-            <div class="card">
-                <!--            <img class="card-img-top" src="..." alt="Card image cap">-->
-                <div class="card-body">
-                    <h5 class="card-title">{{ book.title }}</h5>
-                    <p class="card-text">{{ book.price }}</p>
-                    <a href="{{ path('add-to-cart', book) }}"
-                       class="btn btn-primary">Add to cart</a>
-                    <a href="{{ path('book_item', book) }}"
-                       class="btn btn-success">Details</a>
-                </div>
+    <h1>Books</h1>
+
+    <div style="margin: 10px">
+        {% for button in pagination.buttons %}
+            {% if button.isActive %}
+                <a href='{{ path('books_list', button) }}'>
+                    <button class="btn btn-success">{{ button.text }}</button>
+                </a>
+            {% else %}
+                <a href='{{ path('books_list', button) }}'>
+                    <button class="btn btn-info">{{ button.text }}</button>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+    {#{% for book in books %}#}
+    <div class="col-md-4" style="display: none" id="js-book-element-tpl">
+        <input id="page" type="hidden" value="{{ page }}">
+        <div class="card">
+            <!--            <img class="card-img-top" src="..." alt="Card image cap">-->
+            <div class="card-body">
+                <h5 class="card-title js-book-title"></h5>
+                <p class="card-text js-book-price"></p>
+                <a href="/project/book/"
+                   class="btn btn-primary">Add to cart</a>
+                <a href="#"
+                   class="btn btn-success js-book-details">Details</a>
             </div>
         </div>
-    {% endfor %}
-</div>
+    </div>
+    {#{% endfor %}  #}
+    <div style="display: none; background: url('https://loading.io/spinners/midorikappa/lg.swimming-kappa-ajax-loader.gif'); width: 100px; height: 100px; background-size: 100px 100px; margin: 0 auto;" id="spinner"></div>
+
+    <div class="row row-wrapper" align="left"></div>
+
+    <script>
+        $(document).ready(function ($) {
+            let $spinner = $("#spinner");
+            $spinner.show();
+            $.get('/project/api/books/' + $("#page").val())
+                .done(function (r) {
+                    $spinner.hide();
+                    let $bookElement, $bookWrapper = $('.row-wrapper');
+                    let $tplElement = $("#js-book-element-tpl");
+                    for(let book of r) {
+                        $bookElement = $tplElement.clone();
+                        $bookElement.removeAttr('id');
+                        $bookElement.find(".js-book-title").text(book.title);
+                        $bookElement.find(".js-book-price").text(book.price);
+                        let $details = $bookElement.find("#js-book-details");
+                        $details.attr('href', $details.attr('htef') + book.id);
+                        $bookElement.show().appendTo($bookWrapper);
+                    }
+                })
+                .fail(function (r) {
+                    console.log('fail', r);
+                })
+        });
+    </script>
 {% endblock %}
